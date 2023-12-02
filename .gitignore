@@ -21,6 +21,6 @@
 go.work
 
 # Project related
-*.txt
+template
 scripts
 go.mod

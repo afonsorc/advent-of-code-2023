@@ -40,7 +40,7 @@ func solve(input []string, isPartTwo bool) any {
 	hands := make([]Hand, 0)
 
 	// high card 0, pair 100, two pair 200, trio 300, fullhouse 400, poker 500, five of a kind 600
-	scores := map[int]int{1: 0, 2: 100, 3: 300, 4: 500, 5: 600}
+	handStrength := map[int]int{1: 0, 2: 100, 3: 300, 4: 500, 5: 600}
 	cardValue := map[rune]int{'A': 13, 'K': 12, 'Q': 11, 'J': 10, 'T': 9, '9': 8, '8': 7, '7': 6, '6': 5, '5': 4, '4': 3, '3': 2, '2': 1}
 
 	if isPartTwo {
@@ -53,7 +53,7 @@ func solve(input []string, isPartTwo bool) any {
 		bid, _ := strconv.Atoi(hand[1])
 		newHand := Hand{[5]int{0}, bid}
 
-		// process type of hand and add tiebreaker score
+		// count cards and add tiebreaker score
 		for i, card := range hand[0] {
 			handMap[card]++
 			newHand.scores[i] = cardValue[card]
@@ -61,7 +61,7 @@ func solve(input []string, isPartTwo bool) any {
 
 		// replace jokers by the most common card
 		if isPartTwo {
-			mostCommonCard := '0'
+			mostCommonCard := 'A'
 			mostCommonCardAmount := 0
 			for card, cardAmount := range handMap {
 				if cardAmount > mostCommonCardAmount && card != 'J' {
@@ -73,8 +73,8 @@ func solve(input []string, isPartTwo bool) any {
 			handMap['J'] = 0
 		}
 
-		for _, card := range handMap {
-			newHand.scores[0] += scores[card]
+		for _, cardAmount := range handMap {
+			newHand.scores[0] += handStrength[cardAmount]
 		}
 		hands = append(hands, newHand)
 	}
